@@ -5,8 +5,14 @@ import {
     ipcMain,
     dialog
 } from 'electron';
+import * as dbutil from "../lib/utility/sqliteUtility"
+import * as mProcess from "../process/process"
 
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
+
+const readDb: string = "../../../db/address.db";
+const dbc: dbutil.dbCommon = new dbutil.dbCommon(readDb);
+const processDao = new mProcess.allAddressDao(dbc.getConnection());
 
 async function handleFileOpen() {
     const { canceled, filePaths } = await dialog.showOpenDialog({ title: "Open File" })
